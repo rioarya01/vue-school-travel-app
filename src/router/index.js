@@ -7,6 +7,30 @@ const routes = [
     // Home
     { path: '/', name: 'Home', component: Home },
     // Destination
+    {
+        path: '/protected',
+        name: 'protected',
+        component: ()=>import('@/views/Protected.vue'),
+        meta: {
+            requireAuth: true,
+        }
+    },
+    // Login
+    {
+        path: '/login',
+        name: 'login',
+        component: ()=>import('@/views/Login.vue'),
+    },
+    // Invoices
+    {
+        path: '/invoices',
+        name: 'invoices',
+        component: ()=>import('@/views/Invoices.vue'),
+        meta: {
+            requireAuth: true,
+        }
+    },
+    // Destination
     { 
         path: '/destination/:id/:slug', 
         name: 'destination.show', 
@@ -58,6 +82,12 @@ const router = createRouter({
             setTimeout(()=> resolve({top: 0, behavior: 'smooth'}), 300)
         })
         // return{top: null, left: null, behavior: null}
+    }
+})
+router.beforeEach((to, from)=>{
+    if(to.meta.requireAuth && !window.user){
+        // need to login if not already logged in
+        return {name: 'login', query: {redirect: to.fullPath}}
     }
 })
 export default router
