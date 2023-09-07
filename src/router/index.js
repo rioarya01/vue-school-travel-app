@@ -5,31 +5,48 @@ import sourceData from '@/data.json'
 
 const routes = [
     // Home
-    { path: '/', name: 'Home', component: Home },
-    // Destination
+    { path: '/', name: 'Home', component: Home, alias: '/home' },
+    // Bisa menggunakan redirect seperti dibawah ini atau cukup menggunakan alias diatas
+    // { path: '/home', redirect: "/" },
+
+    // Protected = hasil dari login
     {
         path: '/protected',
         name: 'protected',
-        component: ()=>import('@/views/Protected.vue'),
+        components: {
+            default: ()=>import('@/views/Protected.vue'),
+            LeftSidebar: ()=>import('@/components/LeftSidebar.vue')
+        },
         meta: {
             requireAuth: true,
         }
     },
+
     // Login
     {
         path: '/login',
         name: 'login',
         component: ()=>import('@/views/Login.vue'),
     },
+
     // Invoices
     {
         path: '/invoices',
         name: 'invoices',
-        component: ()=>import('@/views/Invoices.vue'),
+        components: {
+            default: ()=>import('@/views/Invoices.vue'),
+            LeftSidebar: ()=>import('@/components/LeftSidebar.vue'),
+        },
         meta: {
             requireAuth: true,
         }
     },
+
+    {
+        path: "/example/:id(\\d+)?",
+        component: ()=>import('@/views/Login.vue'),
+    },
+
     // Destination
     { 
         path: '/destination/:id/:slug', 
